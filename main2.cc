@@ -19,9 +19,8 @@ const GLchar* vertexSource =
 
 "void main()"
 "{"
-"    Color = color;"
 "    Texcoord = texcoord;"
-"    gl_Position = proj * view * model * vec4((position), 0.0, 1.0);"
+"    gl_Position = vec4(position, 0.0, 1.0);"
 "}";
 
 const GLchar* fragmentSource = 
@@ -69,6 +68,9 @@ int main()
 
     Batch bt(&program);
     bt.setTexture(tex);
+    bt.setAttribute("position",2,GL_FLOAT,5 * sizeof(float), 0);
+    bt.setAttribute("texcoord",2,GL_FLOAT,5 * sizeof(float), 2);
+    bt.setAttribute("rotation",1,GL_FLOAT,5 * sizeof(float), 4);
     Sprite s;
     bt.addSprite(s);
 

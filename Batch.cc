@@ -45,7 +45,7 @@ void Batch::setTexture(GLuint _textureID){
     textureID = _textureID;
 }
 
-void Batch::setAttribute(char* _name, 
+void Batch::setAttribute(const char* _name, 
                          GLint _ncomps, 
                          GLenum _type, 
                          GLsizei _stride, 

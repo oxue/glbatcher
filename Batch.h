@@ -34,7 +34,7 @@ public:
     void render();
     void setTexture(GLuint _textureID);
     void setShaderProgram(ShaderProgram* _program);
-    void setAttribute(char* _name, 
+    void setAttribute(const char* _name, 
                       GLint _ncomps, 
                       GLenum _type, 
                       GLsizei _stride, 
