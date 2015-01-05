@@ -1,3 +1,5 @@
+#define GLEW_STATIC
+#include <GL/glew.h>
 #include "Shader.h"
 #include <string>
 #include <SDL2/SDL_opengl.h>
@@ -36,7 +38,12 @@ void Shader::printShaderLog( GLuint _shader ){
     }
 }
 
-GLenum getType()
+GLenum Shader::getType()
 {
-    return _type;
+    return type;
+}
+
+GLuint Shader::getID()
+{
+    return shaderID;
 }

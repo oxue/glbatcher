@@ -13,7 +13,8 @@ private:
 
 public:
     Shader(GLenum _type, std::string _source);
-    Glenum getType();
+    GLenum getType();
+    GLuint getID();
     void printShaderLog(GLuint _shader);
 };
 

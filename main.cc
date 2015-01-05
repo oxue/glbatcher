@@ -61,10 +61,16 @@ int main(int argc, char *argv[])
 
     // SDL GL initialization
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, 
+                        SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-    SDL_Window* window = SDL_CreateWindow("OpenGL", 100, 100, 800, 600, SDL_WINDOW_OPENGL);
+    SDL_Window* window = SDL_CreateWindow("OpenGL", 
+                                          100, 
+                                          100, 
+                                          800, 
+                                          600, 
+                                          SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(window);
 
     // GLEW initialization
@@ -114,7 +120,7 @@ int main(int argc, char *argv[])
     // You can also use mip maps
     int width,height;
 
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, tex[0]);
     unsigned char* image = 
         SOIL_load_image("img.png", &width, &height, 0, SOIL_LOAD_RGB);
@@ -176,7 +182,7 @@ int main(int argc, char *argv[])
     glEnableVertexAttribArray(texAttrib);
 
     glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 1);
-    glUniform1i(glGetUniformLocation(shaderProgram, "tex2"), 0);
+    glUniform1i(glGetUniformLocation(shaderProgram, "tex2"), 3);
 
     GLint mixValLoc = glGetUniformLocation(shaderProgram, "mixVal");
 
