@@ -77,41 +77,19 @@ int main(int argc, char *argv[])
     glewExperimental = GL_TRUE;
     glewInit();
 
-    // Vertex array object
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    // Create shaders
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexSource, NULL);
+    glCompileShader(vertexShader);
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+    glCompileShader(fragmentShader);
 
-    // Vertex data
-    float vertices[] = {
-    //  Position      Color             Texcoords
-        -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // Top-left
-         0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // Top-right
-         0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
-        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
-    };
-
-    GLuint elements[] = {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    // Vertex buffer
-    GLuint vertexBuffer;
-    glGenBuffers(1, &vertexBuffer);
-
-    printf("%u\n", vertexBuffer);
-
-    // Upload data to buffer
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // Element Buffer
-    GLuint ebo;
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
-                 GL_STATIC_DRAW);
+    // Create and link program
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
 
     // Texture object
     GLuint tex[2];
@@ -148,19 +126,43 @@ int main(int argc, char *argv[])
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    // Create shaders
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexSource, NULL);
-    glCompileShader(vertexShader);
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
-    glCompileShader(fragmentShader);
 
-    // Create and link program
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
+    // Vertex array object
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    // Vertex data
+    float vertices[] = {
+    //  Position      Color             Texcoords
+        -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // Top-left
+         0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // Top-right
+         0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
+        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
+    };
+
+    GLuint elements[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    // Vertex buffer
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+
+    // Upload data to buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // Element Buffer
+    GLuint ebo;
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
+                 GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    
 
     // Select program
     glUseProgram(shaderProgram);

@@ -5,6 +5,7 @@
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL.h>
 #include <string>
+#include <stdio.h>
 
 BatchContext::BatchContext() { }
 
@@ -26,9 +27,7 @@ bool BatchContext::initialize(std::string _windowLabel, int _w, int _h){
     context = SDL_GL_CreateContext(window);
 
     // glew initialization
-    glewExperimental = GL_TRUE;
-    glewInit();
-
+    
     return true;
 }
 

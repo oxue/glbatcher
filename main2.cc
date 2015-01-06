@@ -7,6 +7,8 @@
 #include "ShaderProgram.h"
 #include <SDL2/SDL_opengl.h>
 #include <SOIL/SOIL.h>
+#include <iostream>
+#include "UVCoords.h"
 
 const GLchar* vertexSource = 
 "#version 150\n"
@@ -20,7 +22,10 @@ const GLchar* vertexSource =
 "void main()"
 "{"
 "    Texcoord = texcoord;"
-"    gl_Position = vec4(position, 0.0, 1.0);"
+"    vec2 rotPos = vec2(0,0);"
+"    rotPos.x = position.x * cos(rotation) - position.y * sin(rotation);"
+"    rotPos.y = position.x * sin(rotation) + position.y * cos(rotation);"
+"    gl_Position = vec4(rotPos, 0.0, 1.0);"
 "}";
 
 const GLchar* fragmentSource = 
@@ -39,8 +44,18 @@ const GLchar* fragmentSource =
 
 int main()
 {
+
+
     BatchContext b;
     b.initialize();
+
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    if(err!=GLEW_OK)
+    {
+      printf("not ok\n");
+    }
+
 
     ShaderProgram program(Shader(GL_VERTEX_SHADER, vertexSource),
                           Shader(GL_FRAGMENT_SHADER, fragmentSource),
@@ -67,12 +82,18 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     Batch bt(&program);
-    bt.setTexture(tex);
     bt.setAttribute("position",2,GL_FLOAT,5 * sizeof(float), 0);
-    bt.setAttribute("texcoord",2,GL_FLOAT,5 * sizeof(float), 2);
-    bt.setAttribute("rotation",1,GL_FLOAT,5 * sizeof(float), 4);
-    Sprite s;
+    bt.setAttribute("texcoord",2,GL_FLOAT,5 * sizeof(float), 2 * sizeof(float));
+    bt.setAttribute("rotation",1,GL_FLOAT,5 * sizeof(float), 4 * sizeof(float));
+    bt.setTexture(tex);
+    Sprite s(0,0,1,1,UVCoords(0,0,1,1));
+    s.rotation = 3.14/2;
     bt.addSprite(s);
+    bt.render();
+
+    SDL_GL_SwapWindow((b.window));
+
+    getchar();
 
     return 0;
 }

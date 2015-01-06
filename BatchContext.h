@@ -20,7 +20,7 @@ public:
     void drawBatches();
     void clear();
 
-private:
+public:
     SDL_Window* window;
     SDL_GLContext context;
 };

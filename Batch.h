@@ -7,7 +7,9 @@
 
 #define MAX_SPRITE_COUNT 10
 #define INDEXES_PER_SPRITE 6
-#define writeData(_type, _des, _src) *((_type*)(_des)) = (_src);(_des)+=sizeof(_type)
+#define writeData(_type, _des, _src)\
+    *((_type*)(_des)) = (_src);\
+     (_des) = (char*)(_des) + sizeof(_type)
 
 class Batch
 {
