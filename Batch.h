@@ -4,12 +4,16 @@
 #include "Sprite.h"
 #include <SDL2/SDL_opengl.h>
 #include "ShaderProgram.h"
+#include "BatchContext.h"
+#include <glm/glm.hpp>
 
 #define MAX_SPRITE_COUNT 10
 #define INDEXES_PER_SPRITE 6
 #define writeData(_type, _des, _src)\
     *((_type*)(_des)) = (_src);\
      (_des) = (char*)(_des) + sizeof(_type)
+
+class BatchContext;
 
 class Batch
 {
@@ -26,11 +30,14 @@ private:
     int indexCount;
     int spriteCount;
 
+    glm::mat4 viewPortMatrix;
+    int zoom;
+
     ShaderProgram* pShaderProgram;
 
 public:
-    Batch();
-    Batch(ShaderProgram* _program);
+    Batch(const BatchContext& _batchContext);
+    Batch(const BatchContext& _batchContext, ShaderProgram* _program);
 
     void addSprite(Sprite _sprite);
     void render();

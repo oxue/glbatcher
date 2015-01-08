@@ -5,8 +5,13 @@
 #include "Vec2.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "BatchContext.h"
 
-Batch::Batch():
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+Batch::Batch(const BatchContext& _batchContext):
     vertexArray(NULL),
     spriteCount(0),
     vertexCount(0),
@@ -17,12 +22,14 @@ Batch::Batch():
     indexArray = new GLuint[MAX_SPRITE_COUNT * INDEXES_PER_SPRITE];
 }
 
-Batch::Batch(ShaderProgram* _program):
+Batch::Batch(const *BatchContext& _batchContext, ShaderProgram* _program):
     pShaderProgram(_program), 
     spriteCount(0),
     vertexCount(0),
+    zoom(0),
     indexCount(0)
 {
+    viewPortMatrix = _batchContext.get2DMatrix();
     sprites = new Sprite[MAX_SPRITE_COUNT];
     indexArray = new GLuint[MAX_SPRITE_COUNT * INDEXES_PER_SPRITE];
     vertexArray = 
@@ -84,17 +91,13 @@ void Batch::render()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureID);
     pShaderProgram->setUniformInt1("tex", 0);
-
+    pShaderProgram->setUniformMatrix4("mat", glm::value_ptr(viewPortMatrix));
     glClear(GL_COLOR_BUFFER_BIT);
     glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 }
 
 // Perhaps use templates later on to sepcify own vertex formats
 void Batch::uploadSprite(Sprite &_sprite){
-    if(pShaderProgram == NULL) {
-        printf("No shaderprogram set in Batch, upload Aborted");
-        return;
-    }
     if(_sprite.addr == NULL){
         // change this
         _sprite.addr = 
@@ -120,17 +123,16 @@ void Batch::uploadSprite(Sprite &_sprite){
     writeData(Vec2, tmp, _sprite.texFrame.bottomLeft);
     writeData(float, tmp, _sprite.rotation);
 
-    printf("%f", _sprite.rotation);
+    GLuint tmpi = indexCount;
+    indexArray[indexCount++] = vertexCount + 0;
+    indexArray[indexCount++] = vertexCount + 1;
+    indexArray[indexCount++] = vertexCount + 2;
+    indexArray[indexCount++] = vertexCount + 2;
+    indexArray[indexCount++] = vertexCount + 3;
+    indexArray[indexCount++] = vertexCount + 0;
 
     vertexCount += 4;
 
-    GLuint tmpi = indexCount;
-    indexArray[indexCount++] = indexCount - 1;
-    indexArray[indexCount++] = indexCount - 1;
-    indexArray[indexCount++] = indexCount - 2;
-    indexArray[indexCount++] = indexCount - 2;
-    indexArray[indexCount++] = indexCount - 2;
-    indexArray[indexCount++] = indexCount - 6;
 
     printf("uploaded\n");
 }

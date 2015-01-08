@@ -19,13 +19,15 @@ const GLchar* vertexSource =
 
 "out vec2 Texcoord;"
 
+"uniform mat4 mat;"
+
 "void main()"
 "{"
 "    Texcoord = texcoord;"
 "    vec2 rotPos = vec2(0,0);"
 "    rotPos.x = position.x * cos(rotation) - position.y * sin(rotation);"
 "    rotPos.y = position.x * sin(rotation) + position.y * cos(rotation);"
-"    gl_Position = vec4(rotPos, 0.0, 1.0);"
+"    gl_Position = mat * vec4(rotPos, 0.0, 1.0);"
 "}";
 
 const GLchar* fragmentSource = 
@@ -81,13 +83,15 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    Batch bt(&program);
+    Batch bt(b, &program);
     bt.setAttribute("position",2,GL_FLOAT,5 * sizeof(float), 0);
     bt.setAttribute("texcoord",2,GL_FLOAT,5 * sizeof(float), 2 * sizeof(float));
     bt.setAttribute("rotation",1,GL_FLOAT,5 * sizeof(float), 4 * sizeof(float));
     bt.setTexture(tex);
-    Sprite s(0,0,1,1,UVCoords(0,0,1,1));
-    s.rotation = 3.14/2;
+    Sprite s(0,0,32,32,UVCoords(0,0,1,1));
+    //s.rotation = 3.14/2;
+    bt.addSprite(s);
+    s = Sprite(200,0,32,32,UVCoords(0,0,1,1));
     bt.addSprite(s);
     bt.render();
 

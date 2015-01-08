@@ -29,6 +29,10 @@ GLuint ShaderProgram::getAttribLocation(const char* _name)
     return glGetAttribLocation(programID, _name);
 }
 
+void ShaderProgram::setUniformMatrix4(const char* _name, const GLfloat* _mat)
+{
+    glUniformMatrix4fv(glGetUniformLocation(programID, _name), 1, GL_FALSE, _mat);
+}
 
 void ShaderProgram::setUniformInt1(const char* _name, int value)
 {

@@ -22,6 +22,7 @@ public:
     int getBytesPerVertex();
 
     void setUniformInt1(const char* _name, int value);
+    void setUniformMatrix4(const char* _name, const GLfloat* _mat);
     GLuint getAttribLocation(const char* _name);
 };
 #endif
