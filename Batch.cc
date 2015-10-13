@@ -22,7 +22,7 @@ Batch::Batch(const BatchContext& _batchContext):
     indexArray = new GLuint[MAX_SPRITE_COUNT * INDEXES_PER_SPRITE];
 }
 
-Batch::Batch(const *BatchContext& _batchContext, ShaderProgram* _program):
+Batch::Batch(const BatchContext& _batchContext, ShaderProgram* _program):
     pShaderProgram(_program), 
     spriteCount(0),
     vertexCount(0),
